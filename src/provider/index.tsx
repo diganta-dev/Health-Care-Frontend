@@ -2,10 +2,13 @@
 import React from 'react'
 import { ReactNode } from 'react'
 import QueryProvider from './query.provider'
+import GoogleAuthProdiver from './google-auth.prodiver'
 
 const Providers = ({ children }: { children: ReactNode }) => {
   return (
-    <QueryProvider>{children}</QueryProvider>
+    <GoogleAuthProdiver>
+      <QueryProvider>{children}</QueryProvider>
+    </GoogleAuthProdiver>
   )
 }
 

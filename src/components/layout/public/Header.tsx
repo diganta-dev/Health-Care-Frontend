@@ -4,12 +4,37 @@ import { ArrowRight, HeartPulse, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useLogout, useMe } from "@/hooks";
+import { toast } from "@/components/ui/toast";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const {data,isLoading} = useMe();
+  const {mutate:logout} = useLogout(); 
+  const queryClient = useQueryClient()
+  const handleLogout = ()=>{
+    logout(undefined,{
+      onSuccess:()=>{
+        toast.add({
+          title:"Logout",
+          description:"Logout successfully",
+          type:"success"
+        })
+        queryClient.removeQueries({queryKey:['user']})
+      },
+      onError:()=>{
+        toast.add({
+          title:"Logout",
+          description:"Logout failed",
+          type:"error"
+        })
+      }
+    })
+  }
 
   const routes = [
     { name: "Home", path: "/" },
@@ -57,25 +82,25 @@ const Header = () => {
 
           {/* Desktop Action Buttons */}
           <div className="hidden md:flex items-center gap-2">
-            <Link
+            {!isLoading && !data && (
+              <Button><Link
               href="/login"
-              className={cn(
-                buttonVariants({ variant: "ghost", size: "sm" }),
-                "rounded-full px-4 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/70",
-              )}
+              
             >
               Log In
             </Link>
-            <Link
-              href="/register"
-              className={cn(
-                buttonVariants({ variant: "default", size: "sm" }),
-                "rounded-full px-4 text-sm font-medium shadow-xs gap-1.5 group",
-              )}
-            >
-              <span>Get Started</span>
-              <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
-            </Link>
+            </Button>
+            )}
+            {!isLoading && data && (
+              <Button variant="destructive" onClick={handleLogout}>
+              
+              
+            
+              Log Out
+            
+            </Button>
+            )}
+            
           </div>
 
           {/* Mobile Menu Toggle Button */}
@@ -119,29 +144,24 @@ const Header = () => {
 
             <div className="h-px bg-border/60 my-0.5" />
 
-            <div className="flex flex-col gap-2">
-              <Link
-                href="/login"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className={cn(
-                  buttonVariants({ variant: "outline", size: "sm" }),
-                  "w-full justify-center rounded-xl py-2 font-medium",
-                )}
-              >
-                Log In
-              </Link>
-              <Link
-                href="/register"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className={cn(
-                  buttonVariants({ variant: "default", size: "sm" }),
-                  "w-full justify-center rounded-xl py-2 font-medium shadow-xs gap-1.5",
-                )}
-              >
-                <span>Get Started</span>
-                <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-            </div>
+            {!isLoading && !data && (
+              <Button><Link
+              href="/login"
+              
+            >
+              Log In
+            </Link>
+            </Button>
+            )}
+            {!isLoading && data && (
+              <Button variant="destructive" onClick={handleLogout}>
+              
+              
+            
+              Log Out
+            
+            </Button>
+            )}
           </div>
         )}
       </div>

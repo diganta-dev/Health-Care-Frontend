@@ -13,17 +13,19 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
+import { Field, FieldError, FieldGroup, FieldLabel, FieldSeparator } from "../ui/field";
 import { Input } from "../ui/input";
 import { loginSchema } from "@/validation";
-import { useLogin } from "@/hooks";
+import { useGoogleOAuth, useLogin } from "@/hooks";
 import { useRouter } from "next/navigation";
 import { toast } from "../ui/toast";
+import { GoogleLogin } from "@react-oauth/google";
 
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const {mutate:login,isPending:loginPending} = useLogin()
+  const {mutate:googleLogin}=useGoogleOAuth()
   const router = useRouter()
 
   const form = useForm({
@@ -65,6 +67,47 @@ export default function LoginForm() {
       
     },
   });
+  
+const handleGoogleSuccess = (credetialResponse:{credential?:string}) => {
+  const {credential}=credetialResponse
+  if(!credential){
+    toast.add({
+      title:"Google login failed",
+      description:"Something went wrong",
+      type:"error"
+    })
+    return
+  }
+
+  googleLogin({idToken:credential},{
+    onSuccess:(res)=>{
+      toast.add({
+        title:"Google login successfull",
+        description:"Welcome back",
+        type:"success"
+      })
+      router.push('/')
+    },
+    onError:(error)=>{
+      toast.add({
+        title:"Google login failed",
+        description:error.message || "Please try again",
+        type:"error"
+      })
+    }
+  })
+  
+}
+
+const handleGoogleError = () => {
+  toast.add({
+    title:"Google login failed",
+    description:"Something went wrong",
+    type:"error"
+  })
+  
+  
+}
 
   return (
     <Card className="w-full border-border/80 shadow-md">
@@ -102,7 +145,6 @@ export default function LoginForm() {
                       name={field.name}
                       type="email"
                       autoCapitalize="none"
-                      
                       autoCorrect="off"
                       placeholder="doctor@healthcare.com"
                       onChange={(e) => field.handleChange(e.target.value)}
@@ -141,7 +183,6 @@ export default function LoginForm() {
                         id={field.name}
                         name={field.name}
                         type={showPassword ? "text" : "password"}
-                        
                         placeholder="••••••••"
                         onChange={(e) => field.handleChange(e.target.value)}
                         onBlur={field.handleBlur}
@@ -173,19 +214,38 @@ export default function LoginForm() {
             </form.Field>
 
             {/* Submit Button */}
-            <Button disabled={loginPending}
+            <Button
+              disabled={loginPending}
               type="submit"
               className="w-full h-10 font-medium shadow-xs gap-2 group transition-all mt-1"
             >
-              <span>{loginPending ? 'Logging in...' : 'Sign In'}</span>
-              {loginPending ? <Loader2 className="size-4 animate-spin" /> : <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" />}
+              <span>{loginPending ? "Logging in..." : "Sign In"}</span>
+              {loginPending ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+              )}
             </Button>
           </FieldGroup>
         </form>
+
+        {/* Divider */}
+        <FieldSeparator className="my-5">Or continue with</FieldSeparator>
+
+        {/* Google Login */}
+        <div className="flex justify-center w-full">
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={handleGoogleError}
+            shape="pill"
+            size="large"
+            width="280" 
+          />
+        </div>
       </CardContent>
 
       {/* Card Footer */}
-      <CardFooter className="justify-center pt-0 pb-6">
+      <CardFooter className="justify-center pt-2 pb-6">
         <p className="text-center text-sm text-muted-foreground">
           Don&apos;t have an account?{" "}
           <Link
