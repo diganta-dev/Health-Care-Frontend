@@ -20,12 +20,13 @@ import { useGoogleOAuth, useLogin } from "@/hooks";
 import { useRouter } from "next/navigation";
 import { toast } from "../ui/toast";
 import { GoogleLogin } from "@react-oauth/google";
+import { GoogleLoginButton } from "../module/google-login/GoogleLoin";
 
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const {mutate:login,isPending:loginPending} = useLogin()
-  const {mutate:googleLogin}=useGoogleOAuth()
+ 
   const router = useRouter()
 
   const form = useForm({
@@ -68,46 +69,7 @@ export default function LoginForm() {
     },
   });
   
-const handleGoogleSuccess = (credetialResponse:{credential?:string}) => {
-  const {credential}=credetialResponse
-  if(!credential){
-    toast.add({
-      title:"Google login failed",
-      description:"Something went wrong",
-      type:"error"
-    })
-    return
-  }
 
-  googleLogin({idToken:credential},{
-    onSuccess:(res)=>{
-      toast.add({
-        title:"Google login successfull",
-        description:"Welcome back",
-        type:"success"
-      })
-      router.push('/')
-    },
-    onError:(error)=>{
-      toast.add({
-        title:"Google login failed",
-        description:error.message || "Please try again",
-        type:"error"
-      })
-    }
-  })
-  
-}
-
-const handleGoogleError = () => {
-  toast.add({
-    title:"Google login failed",
-    description:"Something went wrong",
-    type:"error"
-  })
-  
-  
-}
 
   return (
     <Card className="w-full border-border/80 shadow-md">
@@ -234,13 +196,7 @@ const handleGoogleError = () => {
 
         {/* Google Login */}
         <div className="flex justify-center w-full">
-          <GoogleLogin
-            onSuccess={handleGoogleSuccess}
-            onError={handleGoogleError}
-            shape="pill"
-            size="large"
-            width="280" 
-          />
+          <GoogleLoginButton></GoogleLoginButton>
         </div>
       </CardContent>
 

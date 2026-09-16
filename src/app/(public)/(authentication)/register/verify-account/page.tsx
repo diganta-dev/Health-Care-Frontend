@@ -1,9 +1,10 @@
 
-import RegisterForm from "@/components/form/register-form"
+import { VerifyAccountForm } from "@/components/form/verify-account-form"
 import { HeartPulse } from "lucide-react"
 import Link from "next/link"
+import { Suspense } from "react"
 
-export default function RegisterPage() {
+export default function VerifyAccountPage() {
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
@@ -17,9 +18,17 @@ export default function RegisterPage() {
             </span>
           </Link>
         </div>
-        <div className="flex flex-1 items-center justify-center py-6 sm:py-8">
-          <div className="w-full max-w-xl">
-            <RegisterForm />
+        <div className="flex flex-1 items-center justify-center">
+          <div className="w-full max-w-md">
+            <Suspense
+              fallback={
+                <div className="flex h-64 w-full items-center justify-center">
+                  <div className="size-8 animate-spin rounded-full border-3 border-primary border-t-transparent" />
+                </div>
+              }
+            >
+              <VerifyAccountForm />
+            </Suspense>
           </div>
         </div>
       </div>
