@@ -1,3 +1,5 @@
+import AuthGuard from "@/components/auth/auth-guard";
+
 export default function DashboardLayout({
     children,
 }: {
@@ -6,7 +8,7 @@ export default function DashboardLayout({
     return (
         <div>
             <div>Generec Dashboard Layout</div>
-            {children}
+            <AuthGuard>{children}</AuthGuard>
         </div>
     );
 }
