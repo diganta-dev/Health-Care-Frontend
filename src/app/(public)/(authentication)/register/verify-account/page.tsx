@@ -1,8 +1,7 @@
-
-import { VerifyAccountForm } from "@/components/form/verify-account-form"
-import { HeartPulse } from "lucide-react"
-import Link from "next/link"
-import { Suspense } from "react"
+import { HeartPulse } from "lucide-react";
+import Link from "next/link";
+import { Suspense } from "react";
+import { VerifyAccountForm } from "@/components/form/verify-account-form";
 
 export default function VerifyAccountPage() {
   return (
@@ -27,7 +26,7 @@ export default function VerifyAccountPage() {
                 </div>
               }
             >
-              <VerifyAccountForm />
+              <VerifyAccountForm mode="patient" />
             </Suspense>
           </div>
         </div>
@@ -40,5 +39,5 @@ export default function VerifyAccountPage() {
         />
       </div>
     </div>
-  )
+  );
 }

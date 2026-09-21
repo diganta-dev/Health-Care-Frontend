@@ -1,10 +1,12 @@
-"use client"
+"use client";
 
-import { useRouter, useSearchParams } from "next/navigation"
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import { ArrowRight, Loader2, RefreshCw, ShieldCheck } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { cn } from "cn";
+import { REGEXP_ONLY_DIGITS } from "input-otp";
+import { ArrowRight, Loader2, RefreshCw, ShieldCheck } from "lucide-react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -12,52 +14,78 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSeparator,
   InputOTPSlot,
-} from "@/components/ui/input-otp"
-import { toast } from "@/components/ui/toast"
-import { cn } from "cn"
-import { REGEXP_ONLY_DIGITS } from "input-otp"
-import { useVerifyAccount } from "@/hooks"
+} from "@/components/ui/input-otp";
+import { toast } from "@/components/ui/toast";
+import { useVerifyAccount } from "@/hooks";
 
-export function VerifyAccountForm() {
-  const searchParams = useSearchParams()
-  const email = searchParams.get("email")
+export type VerifyAccountMode = "doctor" | "patient";
 
-  const [otp, setOtp] = useState("")
-  const [countdown, setCountdown] = useState(60)
-  const [isResending, setIsResending] = useState(false)
-  const { mutate: verifyAccount, isPending: verifyPending } = useVerifyAccount()
-  const router = useRouter()
+export type VerifyAccountFormProps = {
+  mode?: VerifyAccountMode;
+};
+
+const MODE_CONFIG: Record<
+  VerifyAccountMode,
+  {
+    changeEmailHref: string;
+    missingEmailDescription: string;
+  }
+> = {
+  patient: {
+    changeEmailHref: "/register",
+    missingEmailDescription:
+      "No email address found to verify. Please register or try again.",
+  },
+  doctor: {
+    changeEmailHref: "/apply",
+    missingEmailDescription:
+      "No email address found to verify. Please apply or try again.",
+  },
+};
+
+export function VerifyAccountForm({
+  mode = "patient",
+}: VerifyAccountFormProps) {
+  const config = MODE_CONFIG[mode] ?? MODE_CONFIG.patient;
+  const searchParams = useSearchParams();
+  const email = searchParams.get("email");
+
+  const [otp, setOtp] = useState("");
+  const [countdown, setCountdown] = useState(60);
+  const [isResending, setIsResending] = useState(false);
+  const { mutate: verifyAccount, isPending: verifyPending } =
+    useVerifyAccount();
+
+  const router = useRouter();
 
   // Countdown timer for resend code
   useEffect(() => {
-    if (countdown <= 0) return
+    if (countdown <= 0) return;
     const timer = setInterval(() => {
-      setCountdown((prev) => prev - 1)
-    }, 1000)
-    return () => clearInterval(timer)
-  }, [countdown])
+      setCountdown((prev) => prev - 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [countdown]);
 
   const handleOTP = async (e?: React.FormEvent) => {
-    
-    
     if (e) {
-      e.preventDefault()
-      e.stopPropagation()
+      e.preventDefault();
+      e.stopPropagation();
     }
 
     if (!email) {
       toast.add({
         title: "Missing Email",
-        description: "No email address found to verify. Please register or try again.",
+        description: config.missingEmailDescription,
         type: "error",
-      })
-      return
+      });
+      return;
     }
 
     if (otp.length < 6) {
@@ -65,82 +93,106 @@ export function VerifyAccountForm() {
         title: "Incomplete Code",
         description: "Please enter the full 6-digit verification code.",
         type: "error",
-      })
-      return
+      });
+      return;
     }
 
     const verifyPayload = {
       email,
       otp,
-    }
+    };
 
-    verifyAccount(verifyPayload, {
-      onSuccess: () => {
+    verifyAccount(verifyPayload, { 
+      onSuccess: (res) => {
+        if (!res.success) {
+          toast.add({
+            title: "Server Failure",
+            description: "Something went wrong. Please try again",
+            type: "error",
+          });
+        }
+
+        if (mode === "doctor") {
+          toast.add({
+            title: "Verification Successful",
+            description:
+              "An admin will approve your account. This may take time. Please check your email in few days",
+            type: "success",
+          });
+          router.push("/");
+
+          return;
+        }
+
         toast.add({
-          title: "Account Verified",
-          description: "Your account has been verified successfully.",
+          title: "Verification Successful",
+          description: "Welcome onboard",
           type: "success",
-        })
-        router.push("/")
+        });
+        router.push("/");
       },
       onError: (error) => {
         toast.add({
           title: "Verification Failed",
-          description: error.message || "Invalid or expired verification code. Please try again.",
+          description:
+            error.message ||
+            "Invalid or expired verification code. Please try again.",
           type: "error",
-        })
+        });
       },
-    })
-  }
+    });
+  };
 
   const handleResend = async () => {
-    if (countdown > 0 || isResending) return
+    if (countdown > 0 || isResending) return;
 
     if (!email) {
       toast.add({
         title: "Missing Email",
         description: "No email address found to resend code to.",
         type: "error",
-      })
-      return
+      });
+      return;
     }
 
-    setIsResending(true)
+    setIsResending(true);
     try {
       toast.add({
         title: "Code Resent",
         description: `A new verification code was sent to ${email}.`,
         type: "success",
-      })
-      setCountdown(60)
+      });
+      setCountdown(60);
     } catch {
       toast.add({
         title: "Failed to Resend",
-        description: "Could not send verification code. Please try again later.",
+        description:
+          "Could not send verification code. Please try again later.",
         type: "error",
-      })
+      });
     } finally {
-      setIsResending(false)
+      setIsResending(false);
     }
-  }
+  };
 
   return (
-    <Card className="w-full border-border/80 shadow-md">
+    <Card className="w-full border-border/60 shadow-xl shadow-black/[0.04] backdrop-blur-sm bg-card/95 rounded-2xl">
       {/* Card Header */}
       <CardHeader className="text-center pb-4 space-y-2">
-        <div className="mx-auto mb-1 flex size-12 items-center justify-center rounded-2xl bg-primary/10 text-primary ring-8 ring-primary/5">
+        <div className="mx-auto mb-1 flex size-12 items-center justify-center rounded-2xl bg-primary/10 text-primary ring-8 ring-primary/5 transition-transform hover:scale-105">
           <ShieldCheck className="size-6" />
         </div>
         <CardTitle className="text-2xl font-bold tracking-tight">
           Verify Your Account
         </CardTitle>
-        <CardDescription className="text-sm text-muted-foreground leading-relaxed">
-          Enter the 6-digit verification code sent to{" "}
-          <br className="hidden sm:inline" />
+        <CardDescription className="text-sm text-muted-foreground leading-relaxed max-w-sm mx-auto">
+          Enter the 6-digit verification code sent to
           {email ? (
-            <span className="font-semibold text-foreground break-all">{email}</span>
+            <span className="mt-1.5 block font-semibold text-foreground break-all select-all text-sm sm:text-base">
+              {email}
+            </span>
           ) : (
-            <span className="font-medium text-foreground">your email address</span>
+            <span className="font-medium text-foreground"> your email address</span>
           )}
         </CardDescription>
       </CardHeader>
@@ -156,12 +208,13 @@ export function VerifyAccountForm() {
           <div className="flex flex-col items-center gap-3 w-full">
             <InputOTP
               maxLength={6}
-              value={otp} autoComplete="off"
+              value={otp}
+              autoComplete="off"
               onChange={(value) => setOtp(value)}
               id="otp-verification"
               autoFocus
-              containerClassName="justify-center" 
-              pattern={REGEXP_ONLY_DIGITS} 
+              containerClassName="justify-center"
+              pattern={REGEXP_ONLY_DIGITS}
             >
               <InputOTPGroup>
                 <InputOTPSlot
@@ -195,21 +248,21 @@ export function VerifyAccountForm() {
             </InputOTP>
 
             <p className="text-xs text-muted-foreground text-center">
-              Enter the 6 digits displayed in the message
+              Enter the 6 digits displayed in your message
             </p>
           </div>
 
           {/* Resend Code Section */}
-          <div className="flex w-full items-center justify-between rounded-lg bg-muted/50 px-3.5 py-2.5 text-xs text-muted-foreground">
+          <div className="flex w-full items-center justify-between rounded-xl bg-muted/60 border border-border/50 px-4 py-2.5 text-xs text-muted-foreground">
             <span>Didn&apos;t receive the code?</span>
             <button
               type="button"
               disabled={countdown > 0 || isResending}
               onClick={handleResend}
-              className="inline-flex items-center gap-1 font-semibold text-primary hover:underline underline-offset-4 disabled:pointer-events-none disabled:opacity-50 transition-colors"
+              className="inline-flex items-center gap-1.5 font-semibold text-primary hover:underline underline-offset-4 disabled:pointer-events-none disabled:opacity-50 transition-colors cursor-pointer"
             >
               <RefreshCw
-                className={cn("size-3", isResending && "animate-spin")}
+                className={cn("size-3.5", isResending && "animate-spin")}
               />
               {countdown > 0 ? `Resend in ${countdown}s` : "Resend code"}
             </button>
@@ -219,7 +272,7 @@ export function VerifyAccountForm() {
           <Button
             type="submit"
             form="otp-form"
-            className="w-full h-10 text-sm font-semibold transition-all shadow-sm"
+            className="w-full h-11 text-sm font-semibold transition-all shadow-sm hover:shadow-md cursor-pointer active:scale-[0.99]"
             disabled={otp.length < 6 || verifyPending}
           >
             {verifyPending ? (
@@ -242,7 +295,7 @@ export function VerifyAccountForm() {
         <p className="text-xs text-muted-foreground">
           Wrong email address?{" "}
           <Link
-            href="/register"
+            href={config.changeEmailHref}
             className="font-medium text-primary hover:underline underline-offset-4"
           >
             Change email
@@ -256,5 +309,5 @@ export function VerifyAccountForm() {
         </Link>
       </CardFooter>
     </Card>
-  )
+  );
 }
