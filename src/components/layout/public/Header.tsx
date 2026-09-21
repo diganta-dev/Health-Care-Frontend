@@ -9,28 +9,29 @@ import { cn } from "@/lib/utils";
 import { useLogout, useMe } from "@/hooks";
 import { toast } from "@/components/ui/toast";
 import { useQueryClient } from "@tanstack/react-query";
+import { UserRole } from "@/types";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
-  const {data,isLoading} = useMe();
-  const {mutate:logout} = useLogout(); 
+  const { data, isLoading } = useMe();
+  const { mutate: logout } = useLogout();
   const queryClient = useQueryClient()
-  const handleLogout = ()=>{
-    logout(undefined,{
-      onSuccess:()=>{
+  const handleLogout = () => {
+    logout(undefined, {
+      onSuccess: () => {
         toast.add({
-          title:"Logout",
-          description:"Logout successfully",
-          type:"success"
+          title: "Logout",
+          description: "Logout successfully",
+          type: "success"
         })
-        queryClient.removeQueries({queryKey:['user']})
+        queryClient.removeQueries({ queryKey: ['user'] })
       },
-      onError:()=>{
+      onError: () => {
         toast.add({
-          title:"Logout",
-          description:"Logout failed",
-          type:"error"
+          title: "Logout",
+          description: "Logout failed",
+          type: "error"
         })
       }
     })
@@ -41,6 +42,13 @@ const Header = () => {
     { name: "About Us", path: "/about-us" },
     { name: "Contact Us", path: "/contact-us" },
   ];
+  const dashboardRoute: Record<UserRole, string> = {
+    "ADMIN": "/admin",
+    "DOCTOR": "/doctor",
+    "PATIENT": "/patient",
+    "SUPER_ADMIN": "/admin"
+  }
+  const role: UserRole = !!data?.data && data?.data.role;
 
   return (
     <header className="sticky top-0 z-50 w-full px-4 sm:px-6 lg:px-8 py-3 transition-all duration-300">
@@ -78,29 +86,42 @@ const Header = () => {
                 </Link>
               );
             })}
+            {role && (
+              <Link
+                href={dashboardRoute[role]}
+                className={cn(
+                  "px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200",
+                  pathname === dashboardRoute[role] || pathname.startsWith(dashboardRoute[role] + "/")
+                    ? "bg-background text-foreground shadow-xs font-semibold"
+                    : "text-muted-foreground hover:text-foreground hover:bg-background/50",
+                )}
+              >
+                Dashboard
+              </Link>
+            )}
           </div>
 
           {/* Desktop Action Buttons */}
           <div className="hidden md:flex items-center gap-2">
             {!isLoading && !data && (
               <Button><Link
-              href="/login"
-              
-            >
-              Log In
-            </Link>
-            </Button>
+                href="/login"
+
+              >
+                Log In
+              </Link>
+              </Button>
             )}
             {!isLoading && data && (
               <Button variant="destructive" onClick={handleLogout}>
-              
-              
-            
-              Log Out
-            
-            </Button>
+
+
+
+                Log Out
+
+              </Button>
             )}
-            
+
           </div>
 
           {/* Mobile Menu Toggle Button */}
@@ -140,27 +161,42 @@ const Header = () => {
                   </Link>
                 );
               })}
+              {role && (
+                <Link
+                  key="dashboard"
+                  href={dashboardRoute[role]}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={cn(
+                    "px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors",
+                    pathname === dashboardRoute[role] || pathname.startsWith(dashboardRoute[role] + "/")
+                      ? "bg-primary/10 text-primary font-semibold"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/60",
+                  )}
+                >
+                  Dashboard
+                </Link>
+              )}
             </div>
 
             <div className="h-px bg-border/60 my-0.5" />
 
             {!isLoading && !data && (
               <Button><Link
-              href="/login"
-              
-            >
-              Log In
-            </Link>
-            </Button>
+                href="/login"
+
+              >
+                Log In
+              </Link>
+              </Button>
             )}
             {!isLoading && data && (
               <Button variant="destructive" onClick={handleLogout}>
-              
-              
-            
-              Log Out
-            
-            </Button>
+
+
+
+                Log Out
+
+              </Button>
             )}
           </div>
         )}

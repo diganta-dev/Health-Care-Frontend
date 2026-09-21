@@ -8,8 +8,8 @@ export default function layout({
     children:ReactNode
 }){
     return(
-        <RoleGuard roles={[ "ADMIN","SUPER_ADMIN"]} >
-            <DashboardShell role={"ADMIN"}>{children}</DashboardShell>
+        <RoleGuard roles={[ "PATIENT"]} >
+            <DashboardShell role={"PATIENT"}>{children}</DashboardShell>
             
             
             </RoleGuard>   )    

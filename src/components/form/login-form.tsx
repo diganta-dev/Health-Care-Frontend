@@ -25,8 +25,8 @@ import { GoogleLoginButton } from "../module/google-login/GoogleLoin";
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
-  const {mutate:login,isPending:loginPending} = useLogin()
- 
+  const { mutate: login, isPending: loginPending } = useLogin()
+
   const router = useRouter()
 
   const form = useForm({
@@ -40,35 +40,35 @@ export default function LoginForm() {
       onSubmit: loginSchema,
     },
     onSubmit: ({ value }) => {
-      const loginData={
-        email:value.email,
-        password:value.password
+      const loginData = {
+        email: value.email,
+        password: value.password
       }
 
-      login(loginData,{
-        onSuccess:(res)=>{
+      login(loginData, {
+        onSuccess: (res) => {
           toast.add({
-         title: "Login Successfully",
-         description: "Welcome back ",
-         type:"success"
-})
+            title: "Login Successfully",
+            description: "Welcome back ",
+            type: "success"
+          })
           router.push('/')
         },
-        onError:(error)=>{
+        onError: (error) => {
           toast.add({
-         title: "Login Failed",
-         description:error.message || "Please check your email and password",
-         type:"error"
-})
+            title: "Login Failed",
+            description: error.message || "Please check your email and password",
+            type: "error"
+          })
         }
-      }, 
-    )
+      },
+      )
 
 
-      
+
     },
   });
-  
+
 
 
   return (

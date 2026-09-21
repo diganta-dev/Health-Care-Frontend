@@ -7,7 +7,7 @@ export default function DashboardLayout({
 }) {
     return (
         <div>
-            <div>Generec Dashboard Layout</div>
+                
             <AuthGuard>{children}</AuthGuard>
         </div>
     );
