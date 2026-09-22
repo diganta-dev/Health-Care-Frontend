@@ -74,37 +74,37 @@ import { DoctorApplicationData } from "@/types";
 
 export default function DoctorApplyForm() {
   const router = useRouter();
-  const {mutate:apply,isPending:isApplyingAsDoctor}=useApplyAsDoctor();
+  const { mutate: apply, isPending: isApplyingAsDoctor } = useApplyAsDoctor();
 
   const form = useForm({
-    defaultValues: {
-      name: "Mizan",
-      email: "drmir+409238@gmail.com",
-      phone: "01912345678",
-      address: "Neptune",
-      specialization: "Cardiologist",
-      licenseNumber: "ABC12334957w3",
-      qualifications: "MBBS",
-      experienceYears: "50",
-      consultationFee: "10000",
-      bio: "My life, my rules.",
-      resume: null as File | null,
-      additionalFiles: [] as File[],
-    },
     // defaultValues: {
-    //   name: "",
-    //   email: "",
-    //   phone: "",
-    //   address: "",
-    //   specialization: "",
-    //   licenseNumber: "",
-    //   qualifications: "",
-    //   experienceYears: "",
-    //   consultationFee: "",
-    //   bio: "",
+    //   name: "Mizan",
+    //   email: "drmir+409238@gmail.com",
+    //   phone: "01912345678",
+    //   address: "Neptune",
+    //   specialization: "Cardiologist",
+    //   licenseNumber: "ABC12334957w3",
+    //   qualifications: "MBBS",
+    //   experienceYears: "50",
+    //   consultationFee: "10000",
+    //   bio: "My life, my rules.",
     //   resume: null as File | null,
     //   additionalFiles: [] as File[],
     // },
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      address: "",
+      specialization: "",
+      licenseNumber: "",
+      qualifications: "",
+      experienceYears: "",
+      consultationFee: "",
+      bio: "",
+      resume: null as File | null,
+      additionalFiles: [] as File[],
+    },
 
     validators: {
       onSubmit: doctorApplicationSchema,
@@ -241,7 +241,10 @@ export default function DoctorApplyForm() {
                     field.state.meta.isTouched && !field.state.meta.isValid;
                   return (
                     <Field data-invalid={isInvalid} className="gap-1.5">
-                      <FieldLabel htmlFor={field.name} className="text-xs font-medium">
+                      <FieldLabel
+                        htmlFor={field.name}
+                        className="text-xs font-medium"
+                      >
                         Full Name <span className="text-destructive">*</span>
                       </FieldLabel>
                       <div className="group/input relative">
@@ -273,8 +276,12 @@ export default function DoctorApplyForm() {
                     field.state.meta.isTouched && !field.state.meta.isValid;
                   return (
                     <Field data-invalid={isInvalid} className="gap-1.5">
-                      <FieldLabel htmlFor={field.name} className="text-xs font-medium">
-                        Email Address <span className="text-destructive">*</span>
+                      <FieldLabel
+                        htmlFor={field.name}
+                        className="text-xs font-medium"
+                      >
+                        Email Address{" "}
+                        <span className="text-destructive">*</span>
                       </FieldLabel>
                       <div className="group/input relative">
                         <Mail className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within/input:text-primary" />
@@ -305,8 +312,12 @@ export default function DoctorApplyForm() {
                     field.state.meta.isTouched && !field.state.meta.isValid;
                   return (
                     <Field data-invalid={isInvalid} className="gap-1.5">
-                      <FieldLabel htmlFor={field.name} className="text-xs font-medium">
-                        Contact Number <span className="text-destructive">*</span>
+                      <FieldLabel
+                        htmlFor={field.name}
+                        className="text-xs font-medium"
+                      >
+                        Contact Number{" "}
+                        <span className="text-destructive">*</span>
                       </FieldLabel>
                       <div className="group/input relative">
                         <Phone className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within/input:text-primary" />
@@ -338,7 +349,10 @@ export default function DoctorApplyForm() {
                   return (
                     <Field data-invalid={isInvalid} className="gap-1.5">
                       <div className="flex items-center justify-between">
-                        <FieldLabel htmlFor={field.name} className="text-xs font-medium">
+                        <FieldLabel
+                          htmlFor={field.name}
+                          className="text-xs font-medium"
+                        >
                           Practice Address
                         </FieldLabel>
                         <span className="text-[11px] text-muted-foreground font-normal">
@@ -393,8 +407,12 @@ export default function DoctorApplyForm() {
                     field.state.meta.isTouched && !field.state.meta.isValid;
                   return (
                     <Field data-invalid={isInvalid} className="gap-1.5">
-                      <FieldLabel htmlFor={field.name} className="text-xs font-medium">
-                        Specialization <span className="text-destructive">*</span>
+                      <FieldLabel
+                        htmlFor={field.name}
+                        className="text-xs font-medium"
+                      >
+                        Specialization{" "}
+                        <span className="text-destructive">*</span>
                       </FieldLabel>
                       <div className="group/input relative">
                         <Stethoscope className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within/input:text-primary" />
@@ -424,7 +442,10 @@ export default function DoctorApplyForm() {
                     field.state.meta.isTouched && !field.state.meta.isValid;
                   return (
                     <Field data-invalid={isInvalid} className="gap-1.5">
-                      <FieldLabel htmlFor={field.name} className="text-xs font-medium">
+                      <FieldLabel
+                        htmlFor={field.name}
+                        className="text-xs font-medium"
+                      >
                         BMDC Registration Number{" "}
                         <span className="text-destructive">*</span>
                       </FieldLabel>
@@ -456,7 +477,10 @@ export default function DoctorApplyForm() {
                     field.state.meta.isTouched && !field.state.meta.isValid;
                   return (
                     <Field data-invalid={isInvalid} className="gap-1.5">
-                      <FieldLabel htmlFor={field.name} className="text-xs font-medium">
+                      <FieldLabel
+                        htmlFor={field.name}
+                        className="text-xs font-medium"
+                      >
                         Medical Qualifications{" "}
                         <span className="text-destructive">*</span>
                       </FieldLabel>
@@ -488,7 +512,10 @@ export default function DoctorApplyForm() {
                     field.state.meta.isTouched && !field.state.meta.isValid;
                   return (
                     <Field data-invalid={isInvalid} className="gap-1.5">
-                      <FieldLabel htmlFor={field.name} className="text-xs font-medium">
+                      <FieldLabel
+                        htmlFor={field.name}
+                        className="text-xs font-medium"
+                      >
                         Years of Experience{" "}
                         <span className="text-destructive">*</span>
                       </FieldLabel>
@@ -526,7 +553,10 @@ export default function DoctorApplyForm() {
                   return (
                     <Field data-invalid={isInvalid} className="gap-1.5">
                       <div className="flex items-center justify-between">
-                        <FieldLabel htmlFor={field.name} className="text-xs font-medium">
+                        <FieldLabel
+                          htmlFor={field.name}
+                          className="text-xs font-medium"
+                        >
                           Consultation Fee (BDT)
                         </FieldLabel>
                         <span className="text-[11px] text-muted-foreground font-normal">
@@ -571,7 +601,8 @@ export default function DoctorApplyForm() {
                   Professional Biography
                 </h2>
                 <p className="text-xs text-muted-foreground">
-                  Tell prospective patients about your medical background and care philosophy
+                  Tell prospective patients about your medical background and
+                  care philosophy
                 </p>
               </div>
             </div>
@@ -583,7 +614,10 @@ export default function DoctorApplyForm() {
                 return (
                   <Field data-invalid={isInvalid} className="gap-1.5">
                     <div className="flex items-center justify-between">
-                      <FieldLabel htmlFor={field.name} className="text-xs font-medium">
+                      <FieldLabel
+                        htmlFor={field.name}
+                        className="text-xs font-medium"
+                      >
                         Professional Bio
                       </FieldLabel>
                       <span className="text-[11px] text-muted-foreground font-normal">
@@ -603,7 +637,8 @@ export default function DoctorApplyForm() {
                     />
                     <div className="flex items-center justify-between gap-2 pt-0.5">
                       <FieldDescription className="text-xs text-muted-foreground">
-                        Displayed on your public profile once approved by the medical board.
+                        Displayed on your public profile once approved by the
+                        medical board.
                       </FieldDescription>
                       <span className="text-xs tabular-nums text-muted-foreground">
                         {field.state.value.length}/1000
@@ -629,7 +664,8 @@ export default function DoctorApplyForm() {
                   Verification Documents
                 </h2>
                 <p className="text-xs text-muted-foreground">
-                  Attach your CV and relevant medical certifications for fast-track review
+                  Attach your CV and relevant medical certifications for
+                  fast-track review
                 </p>
               </div>
             </div>
@@ -643,7 +679,10 @@ export default function DoctorApplyForm() {
                 return (
                   <Field data-invalid={isInvalid} className="gap-2">
                     <div className="flex items-center justify-between">
-                      <FieldLabel htmlFor="resume-field" className="text-xs font-medium">
+                      <FieldLabel
+                        htmlFor="resume-field"
+                        className="text-xs font-medium"
+                      >
                         Curriculum Vitae / Resume{" "}
                         <span className="text-destructive">*</span>
                       </FieldLabel>
@@ -660,7 +699,7 @@ export default function DoctorApplyForm() {
                       accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
                       onChange={(e) => {
                         const selected = e.target.files?.[0] ?? null;
-                        
+
                         field.handleChange(selected);
                         e.target.value = "";
                       }}
@@ -744,11 +783,15 @@ export default function DoctorApplyForm() {
                 return (
                   <Field data-invalid={isInvalid} className="gap-2">
                     <div className="flex items-center justify-between">
-                      <FieldLabel htmlFor="additional-file-field" className="text-xs font-medium">
+                      <FieldLabel
+                        htmlFor="additional-file-field"
+                        className="text-xs font-medium"
+                      >
                         Supporting Documents
                       </FieldLabel>
                       <span className="text-xs text-muted-foreground">
-                        {files.length} of {MAX_ADDITIONAL_FILES} attached (Optional)
+                        {files.length} of {MAX_ADDITIONAL_FILES} attached
+                        (Optional)
                       </span>
                     </div>
 
@@ -766,7 +809,7 @@ export default function DoctorApplyForm() {
                           0,
                           MAX_ADDITIONAL_FILES,
                         );
-                        
+
                         field.handleChange(combined);
                         e.target.value = "";
                       }}
@@ -785,7 +828,8 @@ export default function DoctorApplyForm() {
                           Add Certificates / Degrees
                         </Button>
                         <span className="text-xs text-muted-foreground">
-                          e.g. BMDC Registration, Postgrad degrees, Experience letters
+                          e.g. BMDC Registration, Postgrad degrees, Experience
+                          letters
                         </span>
                       </div>
                     )}
@@ -838,7 +882,8 @@ export default function DoctorApplyForm() {
           {/* Submission Bar */}
           <div className="pt-4 border-t border-border/60 flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-xs text-muted-foreground text-center sm:text-left leading-relaxed max-w-sm">
-              By submitting, you certify that all information and medical credentials provided are genuine and subject to verification.
+              By submitting, you certify that all information and medical
+              credentials provided are genuine and subject to verification.
             </p>
             <Button
               type="submit"

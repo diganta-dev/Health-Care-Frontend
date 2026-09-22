@@ -13,7 +13,13 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { Field, FieldError, FieldGroup, FieldLabel, FieldSeparator } from "../ui/field";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldSeparator,
+} from "../ui/field";
 import { Input } from "../ui/input";
 import { loginSchema } from "@/validation";
 import { useGoogleOAuth, useLogin } from "@/hooks";
@@ -22,12 +28,11 @@ import { toast } from "../ui/toast";
 import { GoogleLogin } from "@react-oauth/google";
 import { GoogleLoginButton } from "../module/google-login/GoogleLoin";
 
-
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
-  const { mutate: login, isPending: loginPending } = useLogin()
+  const { mutate: login, isPending: loginPending } = useLogin();
 
-  const router = useRouter()
+  const router = useRouter();
 
   const form = useForm({
     defaultValues: {
@@ -42,34 +47,29 @@ export default function LoginForm() {
     onSubmit: ({ value }) => {
       const loginData = {
         email: value.email,
-        password: value.password
-      }
+        password: value.password,
+      };
 
       login(loginData, {
         onSuccess: (res) => {
           toast.add({
             title: "Login Successfully",
             description: "Welcome back ",
-            type: "success"
-          })
-          router.push('/')
+            type: "success",
+          });
+          router.push("/");
         },
         onError: (error) => {
           toast.add({
             title: "Login Failed",
-            description: error.message || "Please check your email and password",
-            type: "error"
-          })
-        }
-      },
-      )
-
-
-
+            description:
+              error.message || "Please check your email and password",
+            type: "error",
+          });
+        },
+      });
     },
   });
-
-
 
   return (
     <Card className="w-full border-border/80 shadow-md">

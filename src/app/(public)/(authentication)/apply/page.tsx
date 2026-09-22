@@ -1,4 +1,3 @@
-
 import Logo from "@/assets/svg/Logo";
 import DoctorApplyForm from "@/components/form/apply-doctor-form";
 import Link from "next/link";

@@ -1,6 +1,5 @@
 import { User } from "./user.type";
 
-
 export interface DoctorApplicationData {
   user: {
     name: string;

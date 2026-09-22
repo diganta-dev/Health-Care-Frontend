@@ -1,5 +1,9 @@
 import apiClient from "@/lib/apiClient";
-import { LoginPayLoad, RegisterPayLoad, VerifyOTPPayLoad } from "@/types/auth.type";
+import {
+  LoginPayLoad,
+  RegisterPayLoad,
+  VerifyOTPPayLoad,
+} from "@/types/auth.type";
 
 export function userRegister(payload: RegisterPayLoad) {
   return apiClient("/auth/register", { method: "POST", body: payload });
@@ -11,11 +15,11 @@ export function userLogin(payload: LoginPayLoad) {
   return apiClient("/auth/login", { method: "POST", body: payload });
 }
 export function userLogout() {
-  return apiClient("/auth/logout", { method: "POST", });
+  return apiClient("/auth/logout", { method: "POST" });
 }
 export function getMe() {
-  return apiClient("/auth/me", { method: "GET", });
+  return apiClient("/auth/me", { method: "GET" });
 }
-export function googleOAuth(payload: { idToken: string; }) {
+export function googleOAuth(payload: { idToken: string }) {
   return apiClient("/auth/google", { method: "POST", body: payload });
-}  
+}

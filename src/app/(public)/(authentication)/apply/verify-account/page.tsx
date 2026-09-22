@@ -1,5 +1,3 @@
-
-
 import Logo from "@/assets/svg/Logo";
 import { VerifyAccountForm } from "@/components/form/verify-account-form";
 import { CheckCircle2, Lock, ShieldCheck, Stethoscope } from "lucide-react";
@@ -62,7 +60,8 @@ export default function VerifyDoctorAccountPage() {
 
         {/* Bottom Footer Notes */}
         <div className="relative z-10 text-center text-xs text-muted-foreground">
-          &copy; {new Date().getFullYear()} PH Healthcare Systems. All rights reserved.
+          &copy; {new Date().getFullYear()} PH Healthcare Systems. All rights
+          reserved.
         </div>
       </div>
 
@@ -101,14 +100,17 @@ export default function VerifyDoctorAccountPage() {
                 Connect with Patients, Transform Lives
               </h2>
               <p className="text-sm text-slate-300 leading-relaxed">
-                Join our trusted platform of certified healthcare professionals providing comprehensive digital and clinical care nationwide.
+                Join our trusted platform of certified healthcare professionals
+                providing comprehensive digital and clinical care nationwide.
               </p>
             </div>
 
             {/* Testimonial / Trust Card */}
             <div className="rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur-md shadow-2xl space-y-3">
               <p className="text-xs text-slate-200 italic leading-relaxed">
-                &ldquo;The verification process is seamless, giving our clinical team the security and speed needed to onboard new specialists with complete confidence.&rdquo;
+                &ldquo;The verification process is seamless, giving our clinical
+                team the security and speed needed to onboard new specialists
+                with complete confidence.&rdquo;
               </p>
               <div className="flex items-center justify-between pt-2 border-t border-white/10 text-xs">
                 <div className="flex items-center gap-2.5">
@@ -116,8 +118,12 @@ export default function VerifyDoctorAccountPage() {
                     SJ
                   </div>
                   <div>
-                    <div className="font-semibold text-white">Dr. Sarah Jenkins, MD</div>
-                    <div className="text-[11px] text-slate-400">Chief Medical Officer</div>
+                    <div className="font-semibold text-white">
+                      Dr. Sarah Jenkins, MD
+                    </div>
+                    <div className="text-[11px] text-slate-400">
+                      Chief Medical Officer
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-1 text-emerald-400 font-medium text-[11px]">

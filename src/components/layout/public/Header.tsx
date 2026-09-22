@@ -16,26 +16,26 @@ const Header = () => {
   const pathname = usePathname();
   const { data, isLoading } = useMe();
   const { mutate: logout } = useLogout();
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
   const handleLogout = () => {
     logout(undefined, {
       onSuccess: () => {
         toast.add({
           title: "Logout",
           description: "Logout successfully",
-          type: "success"
-        })
-        queryClient.removeQueries({ queryKey: ['user'] })
+          type: "success",
+        });
+        queryClient.removeQueries({ queryKey: ["user"] });
       },
       onError: () => {
         toast.add({
           title: "Logout",
           description: "Logout failed",
-          type: "error"
-        })
-      }
-    })
-  }
+          type: "error",
+        });
+      },
+    });
+  };
 
   const routes = [
     { name: "Home", path: "/" },
@@ -43,11 +43,11 @@ const Header = () => {
     { name: "Contact Us", path: "/contact-us" },
   ];
   const dashboardRoute: Record<UserRole, string> = {
-    "ADMIN": "/admin",
-    "DOCTOR": "/doctor",
-    "PATIENT": "/patient",
-    "SUPER_ADMIN": "/admin"
-  }
+    ADMIN: "/admin",
+    DOCTOR: "/doctor",
+    PATIENT: "/patient",
+    SUPER_ADMIN: "/admin",
+  };
   const role: UserRole = !!data?.data && data?.data.role;
 
   return (
@@ -91,7 +91,8 @@ const Header = () => {
                 href={dashboardRoute[role]}
                 className={cn(
                   "px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200",
-                  pathname === dashboardRoute[role] || pathname.startsWith(dashboardRoute[role] + "/")
+                  pathname === dashboardRoute[role] ||
+                    pathname.startsWith(dashboardRoute[role] + "/")
                     ? "bg-background text-foreground shadow-xs font-semibold"
                     : "text-muted-foreground hover:text-foreground hover:bg-background/50",
                 )}
@@ -104,24 +105,15 @@ const Header = () => {
           {/* Desktop Action Buttons */}
           <div className="hidden md:flex items-center gap-2">
             {!isLoading && !data && (
-              <Button><Link
-                href="/login"
-
-              >
-                Log In
-              </Link>
+              <Button>
+                <Link href="/login">Log In</Link>
               </Button>
             )}
             {!isLoading && data && (
               <Button variant="destructive" onClick={handleLogout}>
-
-
-
                 Log Out
-
               </Button>
             )}
-
           </div>
 
           {/* Mobile Menu Toggle Button */}
@@ -168,7 +160,8 @@ const Header = () => {
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={cn(
                     "px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors",
-                    pathname === dashboardRoute[role] || pathname.startsWith(dashboardRoute[role] + "/")
+                    pathname === dashboardRoute[role] ||
+                      pathname.startsWith(dashboardRoute[role] + "/")
                       ? "bg-primary/10 text-primary font-semibold"
                       : "text-muted-foreground hover:text-foreground hover:bg-muted/60",
                   )}
@@ -181,21 +174,13 @@ const Header = () => {
             <div className="h-px bg-border/60 my-0.5" />
 
             {!isLoading && !data && (
-              <Button><Link
-                href="/login"
-
-              >
-                Log In
-              </Link>
+              <Button>
+                <Link href="/login">Log In</Link>
               </Button>
             )}
             {!isLoading && data && (
               <Button variant="destructive" onClick={handleLogout}>
-
-
-
                 Log Out
-
               </Button>
             )}
           </div>

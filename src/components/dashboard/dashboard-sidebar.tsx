@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Sidebar,
@@ -11,30 +11,30 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-} from "@/components/ui/sidebar"
-import Logo from "@/assets/svg/Logo"
-import { SidebarItems, UserRole } from "@/types"
-import { adminRoutes, doctorRoutes, patientRoutes } from "@/routes"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+} from "@/components/ui/sidebar";
+import Logo from "@/assets/svg/Logo";
+import { SidebarItems, UserRole } from "@/types";
+import { adminRoutes, doctorRoutes, patientRoutes } from "@/routes";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-const sideBarRoutes:Partial<Record<UserRole,SidebarItems>> = {
-    SUPER_ADMIN:adminRoutes,
-    ADMIN:adminRoutes,
-    DOCTOR:doctorRoutes,
-    PATIENT:patientRoutes,
-}
+const sideBarRoutes: Partial<Record<UserRole, SidebarItems>> = {
+  SUPER_ADMIN: adminRoutes,
+  ADMIN: adminRoutes,
+  DOCTOR: doctorRoutes,
+  PATIENT: patientRoutes,
+};
 
-export function DashboardSidebar({role}:{role:UserRole}) {
-  const routes =sideBarRoutes[role] || [];
-  const pathName = usePathname()
+export function DashboardSidebar({ role }: { role: UserRole }) {
+  const routes = sideBarRoutes[role] || [];
+  const pathName = usePathname();
   return (
     <Sidebar>
       <SidebarHeader>
         <Link href={"/"}>
           <div className="flex  items-center gap-3">
             <Logo></Logo>
-        <span>Health Core</span>
+            <span>Health Core</span>
           </div>
         </Link>
       </SidebarHeader>
@@ -62,5 +62,5 @@ export function DashboardSidebar({role}:{role:UserRole}) {
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }

@@ -22,7 +22,7 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { toast } from "@/components/ui/toast";
-import { useVerifyAccount } from "@/hooks";
+import { useVerifyAccount, useVerifyDoctorAccount } from "@/hooks";
 
 export type VerifyAccountMode = "doctor" | "patient";
 
@@ -59,8 +59,11 @@ export function VerifyAccountForm({
   const [otp, setOtp] = useState("");
   const [countdown, setCountdown] = useState(60);
   const [isResending, setIsResending] = useState(false);
+  const patientMutation = useVerifyAccount();
+  const doctorMutation = useVerifyDoctorAccount();
+
   const { mutate: verifyAccount, isPending: verifyPending } =
-    useVerifyAccount();
+    mode === "doctor" ? doctorMutation : patientMutation;
 
   const router = useRouter();
 
@@ -102,7 +105,7 @@ export function VerifyAccountForm({
       otp,
     };
 
-    verifyAccount(verifyPayload, { 
+    verifyAccount(verifyPayload, {
       onSuccess: (res) => {
         if (!res.success) {
           toast.add({
@@ -110,6 +113,7 @@ export function VerifyAccountForm({
             description: "Something went wrong. Please try again",
             type: "error",
           });
+          return;
         }
 
         if (mode === "doctor") {
@@ -192,7 +196,10 @@ export function VerifyAccountForm({
               {email}
             </span>
           ) : (
-            <span className="font-medium text-foreground"> your email address</span>
+            <span className="font-medium text-foreground">
+              {" "}
+              your email address
+            </span>
           )}
         </CardDescription>
       </CardHeader>

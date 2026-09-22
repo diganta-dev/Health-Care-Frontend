@@ -1,7 +1,6 @@
-
-import RegisterForm from "@/components/form/register-form"
-import { HeartPulse } from "lucide-react"
-import Link from "next/link"
+import RegisterForm from "@/components/form/register-form";
+import { HeartPulse } from "lucide-react";
+import Link from "next/link";
 
 export default function RegisterPage() {
   return (
@@ -31,5 +30,5 @@ export default function RegisterPage() {
         />
       </div>
     </div>
-  )
+  );
 }
