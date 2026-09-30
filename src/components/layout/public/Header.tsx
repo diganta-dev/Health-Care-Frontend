@@ -39,6 +39,7 @@ const Header = () => {
 
   const routes = [
     { name: "Home", path: "/" },
+    { name: "Doctors", path: "/doctors" },
     { name: "About Us", path: "/about-us" },
     { name: "Contact Us", path: "/contact-us" },
   ];

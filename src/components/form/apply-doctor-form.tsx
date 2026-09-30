@@ -48,7 +48,7 @@ import {
   isAcceptedFileType,
   MAX_ADDITIONAL_FILES,
   MAX_FILE_SIZE,
-} from "@/doctor-application.validation";
+} from "@/validation/doctor-application.validation";
 import { formatFileSize } from "@/utils";
 import { useApplyAsDoctor } from "@/hooks";
 import { toast } from "../ui/toast";

@@ -10,15 +10,21 @@ import {
 import DoctorApprovalSheet from "./doctor-approval.sheet";
 import { useSuspenseGetALlDoctors } from "@/hooks";
 import { Doctor, DoctorParams } from "@/types";
+import { Button } from "@/components/ui/button";
+import { Dispatch, SetStateAction } from "react";
+import TablePagination from "@/components/ui/table-pagination";
 
-interface IProps extends DoctorParams {}
+interface IProps extends DoctorParams {
+  handleReview: Dispatch<SetStateAction<string>>,
+  handlePageChange: Dispatch<SetStateAction<number>>
+}
 
-export default function DoctorApprovalTable(params: IProps) {
+export default function DoctorApprovalTable({ handleReview, handlePageChange, ...params }: IProps) {
   const { data } = useSuspenseGetALlDoctors(params);
 
   const doctors = data?.data || [];
   console.log("doctor", doctors);
-  return (
+  return (<>
     <div className="border rounded-lg">
       <Table>
         <TableHeader>
@@ -44,12 +50,19 @@ export default function DoctorApprovalTable(params: IProps) {
               </TableCell>
               <TableCell>{doctor.specialization}</TableCell>
               <TableCell className="text-right">
-                <DoctorApprovalSheet />
+                {
+                  doctor.user.emailVerified ? <Button onClick={() => handleReview(doctor.id)} disabled={doctor.verificationStatus === "APPROVED"} variant="outline">Review</Button> : <Button variant="outline" disabled>Not Verified Email</Button>
+                }
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
+
     </div>
+    <div className="my=5">
+      <TablePagination totalPages={data.meta.totalPages ?? 0} handlePageChange={handlePageChange} page={params.page ?? 0}></TablePagination>
+    </div>
+  </>
   );
 }

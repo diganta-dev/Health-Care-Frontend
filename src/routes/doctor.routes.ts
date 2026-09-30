@@ -14,7 +14,7 @@ export const doctorRoutes = [
       },
       {
         title: "Schedule",
-        url: `${prefix}/schedule`,
+        url: `${prefix}/schedules`,
       },
     ],
   },
