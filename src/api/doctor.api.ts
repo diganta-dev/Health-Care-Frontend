@@ -61,7 +61,9 @@ export function getTodayScheduleByDoctor(params: {
   page?: number;
   limit?: number;
 }) {
-  return apiClient<ApiResponse<Schedule[]>>("/schedule/todays-schedule", {
+  return apiClient<ApiResponse<Schedule[]>>("/schedule/get-today-schedules", {
     params,
   });
 }
+
+
