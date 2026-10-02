@@ -10,7 +10,7 @@ export function bookAppointment(payload: BookAppointmentPayload) {
 }
 
 export function getMyAppointments(params: { page?: number; limit?: number }) {
-    return apiClient("/appointment/my-appointments", {
+    return apiClient<ApiResponse<{ appointments: Appointment[] }>>("/appointment/my-appointments", {
         params,
     });
 }

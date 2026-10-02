@@ -14,7 +14,7 @@ export default function AppointmentList() {
 
     
 
-    const appointments =  data.data.appointments || [];
+    const appointments =  data?.data.appointments || [];
     console.log("appont: ",appointments)
 
     if (status === "failure") {
