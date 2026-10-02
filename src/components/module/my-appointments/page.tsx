@@ -12,11 +12,7 @@ export default function AppointmentList() {
 
     const { data, isLoading, isError } = useGetMyAppointments({ page: 1, limit: 100 });
 
-    
-
-    const appointments =  data?.data.appointments || [];
-    console.log("appont: ",appointments)
-
+    // ✅ Handle payment redirect statuses FIRST (before loading state)
     if (status === "failure") {
         return (
             <div>
@@ -48,6 +44,9 @@ export default function AppointmentList() {
     if (isError) {
         return <p>Failed to load appointments. Please try again.</p>;
     }
+
+    // ✅ Only access data AFTER loading/error guards pass
+    const appointments = data?.data.appointments || [];
 
     if (appointments.length === 0) {
         return <p>There are no appointments.</p>;

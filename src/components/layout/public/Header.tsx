@@ -3,7 +3,7 @@
 import Logo from "@/assets/svg/Logo";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toast";
-import {  useLogout, useMe } from "@/hooks";
+import { useLogout, useMe } from "@/hooks";
 import { UserRole } from "@/types";
 import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
@@ -23,6 +23,7 @@ export default function Header() {
   };
 
   const { data, isLoading } = useMe();
+
   const { mutate: logout } = useLogout();
   const queryClient = useQueryClient();
 
