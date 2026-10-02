@@ -142,9 +142,9 @@ export default async function DoctorProfilePage({
                         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
                             {[
                                 { icon: BriefcaseBusiness, label: "Experience", value: `${doctor.experienceYears} yrs` },
-                                { icon: CalendarDays,      label: "Member Since", value: String(joinedYear) },
-                                { icon: Clock,             label: "Years Active", value: `${yearsActive} yr${yearsActive > 1 ? "s" : ""}` },
-                                { icon: BadgeCheck,        label: "Status",       value: "Verified" },
+                                { icon: CalendarDays, label: "Member Since", value: String(joinedYear) },
+                                { icon: Clock, label: "Years Active", value: `${yearsActive} yr${yearsActive > 1 ? "s" : ""}` },
+                                { icon: BadgeCheck, label: "Status", value: "Verified" },
                             ].map((stat) => (
                                 <div key={stat.label} className="space-y-1">
                                     <div className="flex items-center gap-1.5 text-muted-foreground">
@@ -309,7 +309,7 @@ export default async function DoctorProfilePage({
                                     </p>
                                 )}
 
-                                <DoctorBooking doctorId={doctor.id}></DoctorBooking> 
+                                <DoctorBooking doctorId={doctor.id}></DoctorBooking>
                             </CardContent>
                         </Card>
 
@@ -370,7 +370,7 @@ export default async function DoctorProfilePage({
                                                         : "text-foreground",
                                                 )}
                                             >
-                                                {item.value} 
+                                                {item.value}
                                             </span>
                                         </li>
                                     ))}
