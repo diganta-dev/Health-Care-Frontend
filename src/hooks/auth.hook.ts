@@ -40,5 +40,6 @@ export const useMe = () => {
     queryKey: ["user"],
     queryFn: getMe,
     retry: false,
+    throwOnError: false,
   });
 };
