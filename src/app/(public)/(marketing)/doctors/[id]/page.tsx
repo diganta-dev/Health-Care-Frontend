@@ -25,17 +25,28 @@ import { cn } from "@/lib/utils";
 import DoctorBooking from "@/components/module/doctors/doctor-booking";
 
 export async function generateStaticParams() {
-    const limit = 100;
-    const data = await getAllPublicDoctors({ limit, page: 1 });
-    const totalPages = data?.meta?.totalPages ?? 1;
-    const all = [...(data?.data ?? [])];
+    try {
+        const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL?.trim();
+        if (!baseURL) {
+            console.warn("[generateStaticParams] NEXT_PUBLIC_API_BASE_URL is not set — skipping static params.");
+            return [];
+        }
 
-    for (let i = 2; i <= totalPages; i++) {
-        const pageData = await getAllPublicDoctors({ limit, page: i });
-        all.push(...(pageData?.data ?? []));
+        const limit = 100;
+        const data = await getAllPublicDoctors({ limit, page: 1 });
+        const totalPages = data?.meta?.totalPages ?? 1;
+        const all = [...(data?.data ?? [])];
+
+        for (let i = 2; i <= totalPages; i++) {
+            const pageData = await getAllPublicDoctors({ limit, page: i });
+            all.push(...(pageData?.data ?? []));
+        }
+
+        return all.map((doctor) => ({ id: String(doctor.id) }));
+    } catch (err) {
+        console.warn("[generateStaticParams] Failed to fetch doctors — skipping static params.", err);
+        return [];
     }
-
-    return all.map((doctor) => ({ id: String(doctor.id) }));
 }
 
 function getInitials(name: string) {
