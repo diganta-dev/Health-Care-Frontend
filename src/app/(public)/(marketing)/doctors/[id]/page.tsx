@@ -24,24 +24,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import DoctorBooking from "@/components/module/doctors/doctor-booking";
 
-export const dynamicParams = true;
-
 export async function generateStaticParams() {
-    try {
-        const limit = 100;
-        const data = await getAllPublicDoctors({ limit, page: 1 });
-        const totalPages = data?.meta?.totalPages ?? 1;
-        const all = [...(data?.data ?? [])];
+    const limit = 100;
+    const data = await getAllPublicDoctors({ limit, page: 1 });
+    const totalPages = data?.meta?.totalPages ?? 1;
+    const all = [...(data?.data ?? [])];
 
-        for (let i = 2; i <= totalPages; i++) {
-            const pageData = await getAllPublicDoctors({ limit, page: i });
-            all.push(...(pageData?.data ?? []));
-        }
-
-        return all.map((doctor) => ({ id: String(doctor.id) }));
-    } catch {
-        return [];
+    for (let i = 2; i <= totalPages; i++) {
+        const pageData = await getAllPublicDoctors({ limit, page: i });
+        all.push(...(pageData?.data ?? []));
     }
+
+    return all.map((doctor) => ({ id: String(doctor.id) }));
 }
 
 function getInitials(name: string) {
